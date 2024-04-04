@@ -1,0 +1,17 @@
+local:
+  creds: ""
+
+LambdaTest:
+  userName: "<LT_USER_NAME>"
+  accessKey: "<LT_ACCESS_KEY>"
+  hubUrl: "<LT_HUB_URL>"
+
+BrowserStack:
+  userName: "<BS_USER_NAME>"
+  accessKey: "<BS_ACCESS_KEY>"
+  hubUrl: "<BS_HUB_URL>"
+
+SauceLabs:
+  userName: "<SL_USER_NAME>"
+  accessKey: "<SL_ACCESS_KEY>"
+  hubUrl: "<SL_HUB_URL>"

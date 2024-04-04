@@ -3,19 +3,25 @@ package Utility;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.ArrayList;
 
 public class WebDriverHelper {
-  private WebDriver driver;
+  protected WebDriver driver;
+  protected Actions actions;
 
-  public void setDriver(WebDriver driver){
+  public WebDriverHelper(WebDriver driver) {
     this.driver = driver;
+    if (driver != null) {
+      actions = new Actions(driver);
+    }
   }
 
-  public void getURL(String url){
+  public void getURL(String url) {
     driver.get(url);
   }
 
@@ -123,6 +129,7 @@ public class WebDriverHelper {
       throw e;
     }
   }
+
   public boolean isDisplayed(String[] locator, int timeOut) {
     String methodName = new Object() {
     }.getClass().getEnclosingMethod().getName();
@@ -135,8 +142,22 @@ public class WebDriverHelper {
   }
 
   public void sendKeys(String[] locator, String text) {
-    WebElement ele = getElement(locator,2);
+    WebElement ele = getElement(locator, 2);
     ele.sendKeys(text);
   }
 
+  public void sendKeysViaAction(CharSequence... keys) {
+    actions.sendKeys(keys).perform();
+  }
+
+  public void switchToTab(int fromTab, int toTab) {
+    try {
+      ArrayList<String> tab = new ArrayList<>(driver.getWindowHandles());
+      driver.switchTo().window(tab.get(fromTab));
+      driver.switchTo().window(tab.get(toTab));
+    } catch (Exception e) {
+      System.out.println("Unable to switch tab.");
+      throw e;
+    }
+  }
 }
