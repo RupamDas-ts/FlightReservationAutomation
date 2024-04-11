@@ -6,6 +6,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.testng.asserts.SoftAssert;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -20,6 +21,14 @@ public class AutomationHelper {
   API_Helper apiHelper = new API_Helper();
   WebDriverHelper webDriverHelper;
   WebDriver driver;
+
+  public static void waitForTime(int time) {
+    try {
+      TimeUnit.SECONDS.sleep(time);
+    } catch (InterruptedException e) {
+      throw new RuntimeException(e);
+    }
+  }
 
   public static String extractOTP(String text) {
     String regexPattern = "(\\d+) is your Cheapflights verification code";
@@ -85,6 +94,7 @@ public class AutomationHelper {
   public DesiredCapabilities getCapabilitiesObject(HashMap<String, String> caps) {
     DesiredCapabilities capabilities = new DesiredCapabilities();
     if (TEST_ENV_NAME.equals("LambdaTest")) {
+      caps.put("visual", "true");
       capabilities.setCapability("LT:Options", caps);
     } else if (TEST_ENV_NAME.equals("SauceLabs")) {
       capabilities.setCapability("sauce:options", caps);
@@ -106,7 +116,7 @@ public class AutomationHelper {
         break;
       }
     } else {
-      String gridURL = HTTP + config.get("userName") + ":" + config.get("accessKey") + LT_HUB_URL;
+      String gridURL = HTTP + config.get("userName") + ":" + config.get("accessKey") + config.get("hubUrl");
       System.out.println("Hub URL: " + gridURL);
       driver = RemoteWebDriver.builder().oneOf(capabilities).address(gridURL).build();
       test_driver.set(driver);
@@ -115,10 +125,10 @@ public class AutomationHelper {
   }
 
   public void openMMTSignUpPage() {
+    SoftAssert softAssert = SOFT_ASSERT.get();
     webDriverHelper.getURL("https://www.in.cheapflights.com/");
-    if (webDriverHelper.isDisplayed(homePageHeading, 5)) {
-      System.out.println("Opening page successful.");
-    }
+    softAssert.assertTrue(webDriverHelper.isDisplayed(homePageHeading, 5), "Opening page is not successful.");
+    SOFT_ASSERT.set(softAssert);
   }
 
   public void createNewMMTAccount() {
@@ -126,30 +136,26 @@ public class AutomationHelper {
       webDriverHelper.clickOnElement(notificationCloseButton);
     }
     webDriverHelper.clickOnElement(createAccountOrSignInButton);
-    try {
-      TimeUnit.SECONDS.sleep(5);
-    } catch (InterruptedException e) {
-      throw new RuntimeException(e);
-    }
+    waitForTime(5);
     webDriverHelper.clickOnElement(createAccountWithEmail);
     webDriverHelper.sendKeys(emailInput, emailAddress.get());
     webDriverHelper.clickOnElement(acceptCreatingNewAccount);
     webDriverHelper.clickOnElement(continueToOTPButton);
+    waitForTime(10);
+    String otp;
     try {
-      TimeUnit.SECONDS.sleep(10);
-    } catch (InterruptedException e) {
-      throw new RuntimeException(e);
+      otp = getOtp(emailAddress.get());
+    } catch (Exception e) {
+      System.out.println("Exception occurred, trying to fetch otp second time. Exception: " + e);
+      waitForTime(10);
+      otp = getOtp(emailAddress.get());
     }
-    String otp = getOtp(emailAddress.get());
     webDriverHelper.sendKeysViaAction(otp);
-    try {
-      TimeUnit.SECONDS.sleep(5);
-    } catch (InterruptedException e) {
-      throw new RuntimeException(e);
-    }
+    waitForTime(5);
   }
 
   public void bookFlight(String origin, String dest, String date) {
+    SoftAssert softAssert = SOFT_ASSERT.get();
     if (webDriverHelper.isDisplayed(removeExistingOrgField, 2)) {
       webDriverHelper.clickOnElement(removeExistingOrgField);
     }
@@ -166,15 +172,11 @@ public class AutomationHelper {
     String[] locatorForDate = dateLocator.clone();
     locatorForDate[1] = locatorForDate[1].replace("<date>", requiredDate);
     webDriverHelper.clickOnElement(locatorForDate);
+    webDriverHelper.clickOnElement(locatorForDate);
     webDriverHelper.clickOnElement(searchButton);
-    try {
-      TimeUnit.SECONDS.sleep(5);
-    } catch (InterruptedException e) {
-      throw new RuntimeException(e);
-    }
+    waitForTime(5);
     webDriverHelper.switchToTab(0, 1);
-    if (webDriverHelper.isDisplayed(results, 5)) {
-      System.out.println("Searching for Flight is success.");
-    }
+    softAssert.assertTrue(webDriverHelper.isDisplayed(results, 5), "Searching for Flight is not success.");
+    SOFT_ASSERT.set(softAssert);
   }
 }

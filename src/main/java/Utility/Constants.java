@@ -1,6 +1,7 @@
 package Utility;
 
 import org.openqa.selenium.WebDriver;
+import org.testng.asserts.SoftAssert;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
@@ -12,15 +13,13 @@ import java.util.Map;
 
 public class Constants {
   public static final String HTTP = "https://";
-  //  public static final String LT_USER_NAME = "rupamd";
-  //  public static final String LT_ACCESS_KEY = "g8bSPewKA2UPOBkcfGMcv1Vmc8N9CM11gIDUUyL9q9a8OpxUwc";
   public static final ThreadLocal<WebDriver> test_driver = new ThreadLocal<>();
+  public static final ThreadLocal<SoftAssert> SOFT_ASSERT = new ThreadLocal<>();
   public static final ThreadLocal<String> emailAddress = new ThreadLocal<>();
   public static final String password = "123456789@a";
   public static final String apiToFetchRandomEmail = "https://www.1secmail.com/api/v1/?action=genRandomMailbox&count=1";
   public static final String apiToFetchAllMessages = "https://www.1secmail.com/api/v1/?action=getMessages&login=<name>&domain=<domain>";
   public static final String apiToFetchSingleMessages = "https://www.1secmail.com/api/v1/?action=readMessage&login=<name>&domain=<domain>&id=<message_id>";
-  public static final String LT_HUB_URL = "@hub.lambdatest.com/wd/hub";
 
   public static final String MMT_URL = "https://www.makemytrip.com/flights";
 
@@ -42,7 +41,7 @@ public class Constants {
   public static final String[] dateInput = new String[] { "css", "div[aria-label='Start date']" };
   public static final String[] dateLocator = new String[] { "xpath", "//div[contains(@aria-label, '<date>')]" };
   public static final String[] searchButton = new String[] { "css", "button[aria-label='Search']" };
-  public static final String[] results = new String[] { "class", "resultsContainer" };
+  public static final String[] results = new String[] { "xpath", "//div[contains(@class,'results-list')]" };
 
   /* Test Env Setup */
   public static final String TEST_ENV_NAME = System.getProperty("ENV_NAME") == null ?
