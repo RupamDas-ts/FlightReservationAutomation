@@ -8,6 +8,6 @@ Feature: Create an CheapFlights account and perform basic functionalities via Au
     And Create new Account
     Then Book Flight From <origin> to <Destination> for given <date> of next month
     Examples:
-      | capabilities                                                   | origin | Destination | date |
-      | browserName=chrome,platform=win10,version=latest,network=true  | CCU    | DEL         | 20   |
-      | browserName=firefox,platform=win10,version=latest,network=true | DEL    | CCU         | 21   |
+      | capabilities                                                  | origin | Destination | date |
+      | browserName=chrome,platform=win10,version=latest,network=true | CCU    | DEL         | 20   |
+      | browserName=chrome,platform=win11,version=latest,network=true | DEL    | CCU         | 21   |

@@ -35,12 +35,12 @@ public class Constants {
   public static final String[] acceptCreatingNewAccount = new String[] { "xpath", "//div[text()='Continue']" };
   public static final String[] continueToOTPButton = new String[] { "xpath", "//div[text()='Create your account']" };
   public static final String[] removeExistingOrgField = new String[] { "xpath",
-    "//*[contains(@class, 'formField') and contains(@class, 'origin')]//div[@aria-label='Remove']" };
+    "//*[contains(@class, 'formField') and contains(@class, 'origin')]//div[contains(@class, 'close')]" };
   public static final String[] originInputField = new String[] { "css", "input[aria-label='Flight origin input']" };
   public static final String[] destInputField = new String[] { "css", "input[aria-label='Flight destination input']" };
   public static final String[] desiredLocation = new String[] { "xpath", "//*[contains(@id, '<location>')]" };
-  public static final String[] dateInput = new String[] { "css", "span[aria-label='Start date calendar input']" };
-  public static final String[] dateLocator = new String[] { "css", "div[aria-label='<date>']" };
+  public static final String[] dateInput = new String[] { "css", "div[aria-label='Start date']" };
+  public static final String[] dateLocator = new String[] { "xpath", "//div[contains(@aria-label, '<date>')]" };
   public static final String[] searchButton = new String[] { "css", "button[aria-label='Search']" };
   public static final String[] results = new String[] { "class", "resultsContainer" };
 
@@ -52,7 +52,7 @@ public class Constants {
   protected static Map<String, String> config = getEnvConfig();
 
   public static Map<String, String> getEnvConfig() {
-    File yamlFile = new File("src/main/TestRunner/Cucumber.yaml");
+    File yamlFile = new File("src/main/java/TestRunner/Cucumber.yaml");
     Yaml ymlFileReader = new Yaml();
     Object envValue = null;
     try {

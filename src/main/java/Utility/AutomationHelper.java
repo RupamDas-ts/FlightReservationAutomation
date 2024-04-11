@@ -166,7 +166,6 @@ public class AutomationHelper {
     String[] locatorForDate = dateLocator.clone();
     locatorForDate[1] = locatorForDate[1].replace("<date>", requiredDate);
     webDriverHelper.clickOnElement(locatorForDate);
-    webDriverHelper.clickOnElement(locatorForDate);
     webDriverHelper.clickOnElement(searchButton);
     try {
       TimeUnit.SECONDS.sleep(5);
