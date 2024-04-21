@@ -3,11 +3,15 @@ package TestRunner;
 import io.cucumber.testng.AbstractTestNGCucumberTests;
 import io.cucumber.testng.CucumberOptions;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
 
 @CucumberOptions(features = "src/main/java", glue = { "FeatureFiles", "TestRunner", "StepDefinations",
-  "Utility" }, plugin = { "pretty", "html:target/cucumber-reports" }, tags = "@flightBooking") @Test public class Runner
+  "Utility" }, plugin = { "pretty", "html:target/cucumber-reports" }, tags = "@flightBooking") public class Runner
   extends AbstractTestNGCucumberTests {
+  public Runner() {
+    super();
+    System.setProperty("log4j.configurationFile", "src/main/java/Utility/log4j2.yaml");
+  }
+
   @Override
   @DataProvider(parallel = true)
   public Object[][] scenarios() {

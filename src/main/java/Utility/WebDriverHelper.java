@@ -1,5 +1,6 @@
 package Utility;
 
+import org.apache.logging.log4j.LogManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 public class WebDriverHelper {
   protected WebDriver driver;
   protected Actions actions;
+  org.apache.logging.log4j.Logger logger = LogManager.getLogger(WebDriverHelper.class);
 
   public WebDriverHelper(WebDriver driver) {
     this.driver = driver;
@@ -156,7 +158,7 @@ public class WebDriverHelper {
       driver.switchTo().window(tab.get(fromTab));
       driver.switchTo().window(tab.get(toTab));
     } catch (Exception e) {
-      System.out.println("Unable to switch tab.");
+      logger.error("Unable to switch tab.");
       throw e;
     }
   }

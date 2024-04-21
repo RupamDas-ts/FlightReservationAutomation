@@ -1,6 +1,7 @@
 package Utility;
 
 import io.restassured.response.Response;
+import org.apache.logging.log4j.LogManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -18,6 +19,7 @@ import java.util.regex.Pattern;
 import static Utility.Constants.*;
 
 public class AutomationHelper {
+  org.apache.logging.log4j.Logger logger = LogManager.getLogger(AutomationHelper.class);
   API_Helper apiHelper = new API_Helper();
   WebDriverHelper webDriverHelper;
   WebDriver driver;
@@ -27,18 +29,6 @@ public class AutomationHelper {
       TimeUnit.SECONDS.sleep(time);
     } catch (InterruptedException e) {
       throw new RuntimeException(e);
-    }
-  }
-
-  public static String extractOTP(String text) {
-    String regexPattern = "(\\d+) is your Cheapflights verification code";
-    Pattern pattern = Pattern.compile(regexPattern);
-    Matcher matcher = pattern.matcher(text);
-    if (matcher.find()) {
-      System.out.println("OTP is: " + matcher.group(1));
-      return matcher.group(1);
-    } else {
-      return null;
     }
   }
 
@@ -52,9 +42,21 @@ public class AutomationHelper {
     return formattedDate;
   }
 
+  public String extractOTP(String text) {
+    String regexPattern = "(\\d+) is your Cheapflights verification code";
+    Pattern pattern = Pattern.compile(regexPattern);
+    Matcher matcher = pattern.matcher(text);
+    if (matcher.find()) {
+      logger.info("OTP is: " + matcher.group(1));
+      return matcher.group(1);
+    } else {
+      return null;
+    }
+  }
+
   public String getRandomEmailID() {
     Response response = apiHelper.getResponse(apiToFetchRandomEmail, null, 200, "");
-    System.out.println("Response of API to generate random email: " + response.asPrettyString());
+    logger.info("Response of API to generate random email: " + response.asPrettyString());
     String[] arrayOfStrings = response.jsonPath().getList("$").toArray(new String[0]);
     if (arrayOfStrings != null && arrayOfStrings.length > 0) {
       emailAddress.set(arrayOfStrings[0]);
@@ -68,14 +70,14 @@ public class AutomationHelper {
     String name = email.split("@")[0];
     String domain = email.split("@")[1];
     String uriForMailBox = apiToFetchAllMessages.replace("<name>", name).replace("<domain>", domain);
-    System.out.println("URI to fetch the mailbox-> " + uriForMailBox);
+    logger.info("URI to fetch the mailbox-> " + uriForMailBox);
     int idOfLastMessage = apiHelper.getResponse(uriForMailBox).jsonPath().getInt("[-1].id");
     String uriToFetchMessageDetails = apiToFetchSingleMessages.replace("<name>", name).replace("<domain>", domain)
       .replace("<message_id>", String.valueOf(idOfLastMessage));
-    System.out.println(
+    logger.info(
       "URI to fetch details of one specific messgae with id: " + idOfLastMessage + "-> " + uriToFetchMessageDetails);
     String bodyOfTheMail = apiHelper.getResponse(uriToFetchMessageDetails).jsonPath().get("subject").toString();
-    System.out.println("Body of the mail: " + bodyOfTheMail);
+    logger.info("Body of the mail: " + bodyOfTheMail);
     return extractOTP(bodyOfTheMail);
   }
 
@@ -103,7 +105,7 @@ public class AutomationHelper {
   }
 
   public void getWebDriverUsingGivenCaps(String capsString) {
-    System.out.println("Caps passed as String:- " + capsString);
+    logger.info("Caps passed as String:- " + capsString);
     HashMap<String, String> caps = getHasMapFromString(capsString);
     DesiredCapabilities capabilities = getCapabilitiesObject(caps);
     if (TEST_ENV_NAME.equals("local")) {
@@ -117,7 +119,7 @@ public class AutomationHelper {
       }
     } else {
       String gridURL = HTTP + config.get("userName") + ":" + config.get("accessKey") + config.get("hubUrl");
-      System.out.println("Hub URL: " + gridURL);
+      logger.info("Hub URL: " + gridURL);
       driver = RemoteWebDriver.builder().oneOf(capabilities).address(gridURL).build();
       test_driver.set(driver);
     }
@@ -142,13 +144,18 @@ public class AutomationHelper {
     webDriverHelper.clickOnElement(acceptCreatingNewAccount);
     webDriverHelper.clickOnElement(continueToOTPButton);
     waitForTime(10);
-    String otp;
-    try {
-      otp = getOtp(emailAddress.get());
-    } catch (Exception e) {
-      System.out.println("Exception occurred, trying to fetch otp second time. Exception: " + e);
-      waitForTime(10);
-      otp = getOtp(emailAddress.get());
+    String otp = "";
+    int maxRetryCount = 5;
+    for (int retryCount = 0; retryCount < maxRetryCount; retryCount++) {
+      try {
+        otp = getOtp(emailAddress.get());
+        break;
+      } catch (Exception e) {
+        logger.error("Exception occurred, trying to fetch otp " + retryCount + "th time. Exception: " + e);
+        if (retryCount == maxRetryCount - 1)
+          throw new RuntimeException(e);
+        waitForTime(20);
+      }
     }
     webDriverHelper.sendKeysViaAction(otp);
     waitForTime(5);

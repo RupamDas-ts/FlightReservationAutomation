@@ -5,9 +5,11 @@ import Utility.Constants;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
+import org.apache.logging.log4j.LogManager;
 import org.testng.asserts.SoftAssert;
 
 public class AutomationStepDefinations {
+  org.apache.logging.log4j.Logger logger = LogManager.getLogger(AutomationStepDefinations.class);
   AutomationHelper automationHelper = new AutomationHelper();
 
   @Given("^Initialize soft assert$")
@@ -20,7 +22,7 @@ public class AutomationStepDefinations {
   public void setupAccountDetails() {
     String emails = automationHelper.getRandomEmailID();
     if (emails.isEmpty())
-      System.out.println("Unable too generate Random Email.");
+      logger.error("Unable to generate Random Email.");
   }
 
   @Then("^Create WedDriver with given ([a-zA-Z0-9_=,:.+\\-]+)$")
