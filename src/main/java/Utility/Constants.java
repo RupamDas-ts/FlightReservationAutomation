@@ -28,7 +28,7 @@ public class Constants {
   public static final String[] homePageHeading = new String[] { "css",
     "a[aria-label='Go to the Cheapflights homepage']" };
   public static final String[] createAccountOrSignInButton = new String[] { "css",
-    "div[class*='menu__wrapper'] button" };
+    "div[class*='HeaderAccount'] div[role='button']" };
   public static final String[] createAccountWithEmail = new String[] { "css", "div[class='continueWithEmail'] button" };
   public static final String[] emailInput = new String[] { "css", "input[placeholder='Email address']" };
   public static final String[] acceptCreatingNewAccount = new String[] { "xpath", "//div[text()='Continue']" };
