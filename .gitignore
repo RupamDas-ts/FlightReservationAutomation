@@ -1,4 +1,5 @@
-/src/main/java/TestRunner/Cucumber.yaml
 /target/
 /.idea/
 /logs/
+/rerun/
+/src/main/java/TestConfigs/Cucumber.yaml
