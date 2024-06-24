@@ -90,6 +90,29 @@ Configuration
 * Use `testng.xml` for regular test execution.
 * Use `testng-rerun.xml` for re-running failed tests.
 
+Running the Project as a Docker Container
+-------------
+
+### Prerequisites
+- Ensure Docker is installed on your system. You can download it from [here](https://www.docker.com/products/docker-desktop).
+
+### Building the Docker Container
+The Docker file is present in the project, which uses a parent image with JDK 22. You can build the Docker container from the given Docker file using the following command:
+
+```sh docker build -t <CONTAINER_NAME> .```
+
+Replace `<CONTAINER_NAME>` with the desired name for your Docker container.
+
+### Running the Docker Container
+When running the container, you need to pass an environment variable named `CUCUMBER_RUN_SCRIPT`, which accepts the Cucumber command you want to run. For example:
+
+```docker run --rm -e CUCUMBER_RUN_SCRIPT="CUCUMBER_FILTER_TAGS='@flightBooking' mvn test -DENV_NAME=LambdaTest -DsuiteXmlFile=testng.xml -DPARALLEL=2" <CONTAINER_NAME>```
+
+Replace <CUCUMBER_COMMAND> with your specific Cucumber command and <CONTAINER_NAME> with the name of your Docker container.
+
+This will execute the specified Cucumber command within the Docker container
+
+
 Contributing
 ------------
 
