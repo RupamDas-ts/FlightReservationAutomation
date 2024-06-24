@@ -6,10 +6,10 @@ pipeline {
       steps {
         catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
           git branch: 'main', url: 'https://github.com/RupamDas-ts/FlightReservationAutomation.git'
-          configFileProvider([configFile(fileId: 'AviationTestConfigProvider.yaml', targetLocation: 'src/main/java/TestRunner/Cucumber.yaml')]) {
+          configFileProvider([configFile(fileId: 'AviationTestConfigProvider.yaml', targetLocation: 'src/main/java/TestConfigs/Cucumber.yaml')]) {
             script {
               bat '''set CUCUMBER_FILTER_TAGS="@flightBooking"'''
-              bat '''mvn test -DENV_NAME="LambdaTest" -DsuiteXmlFile="2Parallel.xml"'''
+              bat '''mvn test -DENV_NAME="LambdaTest" -DsuiteXmlFile="testng.xml" -DPARALLEL=2'''
             }
           }
         }

@@ -51,7 +51,7 @@ public class Constants {
   protected static Map<String, String> config = getEnvConfig();
 
   public static Map<String, String> getEnvConfig() {
-    File yamlFile = new File("src/main/java/TestRunner/Cucumber.yaml");
+    File yamlFile = new File("src/main/java/TestConfigs/Cucumber.yaml");
     Yaml ymlFileReader = new Yaml();
     Object envValue = null;
     try {

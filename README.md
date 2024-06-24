@@ -58,27 +58,37 @@ To run the tests and use the automation framework, follow these steps:
       `mvn clean install`
 
 4. Create `Cucumber.yaml` file with your own credentials the same structure as `Cucumber.sample.yml` and keep that in
-   the `TestRunner` directory
+   the `TestConfigs` directory
 
 5. Run the tests:
 
    bashCopy code for Linux or Mac
 
-   ```CUCUMBER_FILTER_TAGS="@flightBooking" mvn test -DENV_NAME=LambdaTest -DsuiteXmlFile=2Parallel.xml```
+   ```CUCUMBER_FILTER_TAGS="@flightBooking" mvn test -DENV_NAME=LambdaTest -DsuiteXmlFile=testng.xml -DPARALLEL=2```
 
    For Windows
 
    ```set CUCUMBER_FILTER_TAGS="@flightBooking"```
 
-   ```mvn test -DENV_NAME="LambdaTest" -DsuiteXmlFile="2Parallel.xml"```
+   ```mvn test -DENV_NAME="LambdaTest" -DsuiteXmlFile="testng.xml" -DPARALLEL=2```
+
+6. To re-run failed tests:
+
+   ```mvn test -DENV_NAME=LambdaTest -DsuiteXmlFile=testng-rerun.xml -DPARALLEL=2```
+7. To run the same tests multiple times, set the `RUN_N_TIMES` environment variable:
+   
+   ```CUCUMBER_FILTER_TAGS="@flightBooking" mvn test -DENV_NAME=LambdaTest -DsuiteXmlFile=testng.xml -DPARALLEL=2 -DRUN_N_TIMES=3```
 
 Configuration
 -------------
 
 * Modify the `Cucumber.yaml` file to configure credentials to run tests on remote platforms or use `local` as `ENV_NAME`
   to run tests on your local.
-* Tests can be run parallelly or serially by choosing correct `suiteXmlFile` as per requirements like, `1Parallel.xml`
-  for serial execution `2Parallel.xml` for parallel execution.
+* Tests can be run parallelly or serially by providing correct `PARALLEL` value as per requirements like, `-DPARALLEL=1`
+  for serial execution `-DPARALLEL=2` for parallel execution of two tests.
+* To run tests multiple times, set the `RUN_N_TIMES` environment variable to the desired number of iterations.
+* Use `testng.xml` for regular test execution.
+* Use `testng-rerun.xml` for re-running failed tests.
 
 Contributing
 ------------
