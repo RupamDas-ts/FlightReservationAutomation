@@ -13,7 +13,7 @@ public class Runner
   extends AbstractTestNGCucumberTests {
   public Runner() {
     super();
-    System.setProperty("log4j.configurationFile", "src/main/java/Utility/log4j2.yaml");
+    System.setProperty("log4j.configurationFile", "src/main/resources/log4j2.yaml");
   }
 
   @Override
