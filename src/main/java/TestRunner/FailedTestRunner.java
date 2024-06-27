@@ -11,7 +11,7 @@ import org.testng.annotations.DataProvider;
 public class FailedTestRunner extends AbstractTestNGCucumberTests {
   public FailedTestRunner() {
     super();
-    System.setProperty("log4j.configurationFile", "src/main/java/Utility/log4j2.yaml");
+    System.setProperty("log4j.configurationFile", "src/main/resources/log4j2.yaml");
   }
 
   @Override
