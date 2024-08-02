@@ -12,8 +12,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Constants {
+    public static final ThreadLocal<String> userName = new ThreadLocal<>();
     public static final String HTTP = "https://";
     public static final ThreadLocal<WebDriver> test_driver = new ThreadLocal<>();
+    public static final ThreadLocal<String> test_session_id = new ThreadLocal<>();
     public static final ThreadLocal<SoftAssert> SOFT_ASSERT = new ThreadLocal<>();
     public static final ThreadLocal<String> emailAddress = new ThreadLocal<>();
     public static final String password = "123456789@a";

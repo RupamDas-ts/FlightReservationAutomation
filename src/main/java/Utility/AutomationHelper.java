@@ -106,6 +106,7 @@ public class AutomationHelper {
     }
 
     public void getWebDriverUsingGivenCaps(String capsString) {
+        String sessionID;
         logger.info("Caps passed as String:- " + capsString);
         HashMap<String, String> caps = getHasMapFromString(capsString);
         DesiredCapabilities capabilities = getCapabilitiesObject(caps);
@@ -120,11 +121,20 @@ public class AutomationHelper {
             }
         } else {
             String gridURL = HTTP + config.get("userName") + ":" + config.get("accessKey") + config.get("hubUrl");
+            userName.set(config.get("userName"));
             logger.info("Hub URL: " + gridURL);
             driver = RemoteWebDriver.builder().oneOf(capabilities).address(gridURL).build();
             test_driver.set(driver);
+            sessionID = String.valueOf(((RemoteWebDriver) driver).getSessionId());
+            logger.info("Session ID: " + sessionID);
+            test_session_id.set(sessionID);
         }
         webDriverHelper = new WebDriverHelper(driver);
+    }
+
+    public void quitTestDriver(){
+        webDriverHelper.quitDriver();
+        test_driver.remove();
     }
 
     public void openMMTSignUpPage() {
