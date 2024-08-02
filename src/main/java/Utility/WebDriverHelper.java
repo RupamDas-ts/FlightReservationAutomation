@@ -162,4 +162,8 @@ public class WebDriverHelper {
       throw e;
     }
   }
+
+  public void quitDriver(){
+    driver.quit();
+  }
 }

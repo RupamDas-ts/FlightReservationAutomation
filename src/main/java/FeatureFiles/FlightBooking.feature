@@ -8,6 +8,7 @@ Feature: Create an CheapFlights account and perform basic functionalities via Au
     Then Open MMT Log in page
     And Create new Account
     Then Book Flight From <origin> to <Destination> for given <date> of next month
+    Then I close the test driver
     Then I assert all via soft assert
     Examples:
       | capabilities                                                  | origin | Destination | date |

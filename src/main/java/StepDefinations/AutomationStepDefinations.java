@@ -53,4 +53,9 @@ public class AutomationStepDefinations {
       throw new Exception("Unable to do soft asserts, Exceptions: " + e);
     }
   }
+
+  @Then("^I close the test driver$")
+  public void iCloseTheTestDriver() {
+    automationHelper.quitTestDriver();
+  }
 }
